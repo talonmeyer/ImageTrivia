@@ -1,15 +1,13 @@
 <?php
    include("config.php");
    session_start();
-   
+
    if($_SERVER["REQUEST_METHOD"] == "POST") {
-      // username and password sent from form 
-     
      //check if login or register
      $Reg_username = mysqli_real_escape_string($db,$_POST['Reg_username']);
+
+       //If Register event
      if($Reg_username !== '')
-      
-     //If Register event
      {
        //get variables
        $Reg_password = mysqli_real_escape_string($db,$_POST['Reg_password']);
@@ -18,66 +16,54 @@
        $email = mysqli_real_escape_string($db,$_POST['email']);
 
       //make sure username isn't taken
-      $check_username = "SELECT id FROM User WHERE username = '$myusername'";
+      $check_username = "SELECT id FROM User WHERE username = '$Reg_username'";
       $result_check_username = mysqli_query($db,$check_username);
       $row = mysqli_fetch_array($result_check_username,MYSQLI_ASSOC);
       $active = $row['active'];
-      
-     /* $count = mysqli_num_rows($result);
-       
-      if($count !== 0) { //if username exists
-			$error = "Username already exists!";
-      }else { //if username does not exist */
-        
-        //make sure email isn't registered already
-      $check = "SELECT id FROM User WHERE email = '$email'";
-      $result = mysqli_query($db,$check);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $active = $row['active'];
-      $count = mysqli_num_rows($result);
-      
-      if ($count !== 0) {
-        $error = "Email already registered!";
+
+      if($count !== 0) {
+          $error = "Username already taken. Real original.";
       } else {
-         //create session variables and redirect to register.php
-         $_SESSION['Reg_password'] = $Reg_password;
-         $_SESSION['Reg_password2'] = $Reg_password2;
-         $_SESSION['fullname'] = $fullname;
-         $_SESSION['email'] = $email;
-         $_SESSION['Reg_username'] = $Reg_username;
-         header("location: register.php");
+          //make sure email isn't registered already
+          $check = "SELECT id FROM User WHERE email = '$email'";
+          $result = mysqli_query($db,$check);
+          $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+          $active = $row['active'];
+          $count = mysqli_num_rows($result);
 
+          if ($count !== 0) {
+              $error = "Email already registered!";
+          } else {
+              //create session variables and redirect to register.php
+              $_SESSION['password'] = $Reg_password;
+              $_SESSION['fullname'] = $fullname;
+              $_SESSION['email'] = $email;
+              $_SESSION['username'] = $Reg_username;
+              header("location: register.php");
+          }
       }
-
-        
-        
-
-         
-      //}
-       
      }
-       
-      //IF login event
-      $myusername = mysqli_real_escape_string($db,$_POST['username']);
-      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
-     
-      
-      $sql = "SELECT id FROM User WHERE username = '$myusername' and passcode = '$mypassword'";
-      $result = mysqli_query($db,$sql);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $active = $row['active'];
-      
-      $count = mysqli_num_rows($result);
-      
-      // If result matched $myusername and $mypassword, table row must be 1 row
-		
-      if($count == 1) {
-        
-         $_SESSION['login_user'] = $myusername;
-         header("location: main.php");
-      }else {
-         $error = "Your Login Name or Password is invalid";
-      }
+       //IF login event
+       else {
+         $myusername = mysqli_real_escape_string($db,$_POST['username']);
+         $mypassword = mysqli_real_escape_string($db,$_POST['password']);
+
+         $sql = "SELECT id FROM User WHERE username = '$myusername' and passcode = '$mypassword'";
+         $result = mysqli_query($db,$sql);
+         $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+         $active = $row['active'];
+
+         $count = mysqli_num_rows($result);
+
+         // If result matched $myusername and $mypassword, table row must be 1 row
+         if($count == 1) {
+
+             $_SESSION['login_user'] = $myusername;
+             header("location: main.php");
+         }else {
+             $error = "Your Login Name or Password is invalid";
+         }
+     }
    }
 ?>
 <html>
