@@ -1,19 +1,36 @@
 <?php
 	 include("config.php");
-   session_start();
-print_r($_SESSION);
+    session_start();
+    //print_r($_SESSION);
+echo session_id();
+
 
      $result = mysqli_query($db,'SELECT (Max(id)+1) FROM User');
      $row = mysqli_fetch_array($result,MYSQLI_NUM);
-	 echo $row[0];
+     $maxid = $row[0];
+
+    //convert session variables
+    $fullname = $_SESSION['fullname'];
+    $email = $_SESSION['email'];
+    $username = $_SESSION['username'];
+    $password = $_SESSION['password'];
+
+    echo $fullname;
 
 
-   //if($_SERVER["REQUEST_METHOD"] == "POST") {}
+    //$headerfrom = 'index.php';
+
+
+  // if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+  // }
      
-    echo "Name: " . $_SESSION['fullname'] . ".<br>";
-	echo "Email:  " . $_SESSION['email'] . ".<br>";
-	echo "User: " . $_SESSION['Reg_username'] . ".<br>";
-	echo "Password: " . $_SESSION['Reg_password'] . ".<br>";
+   /* if (headers_sent ($headerfrom)) {
+        echo "Name: " . $fullname;
+        echo "Email:  " . $email;
+        echo "User: " . $username;
+        echo "Password: " . $password;
+    }*/
 
 
      
@@ -54,9 +71,10 @@ VALUES (''$newid'', 'gnu', 'newpass', 'name', 'email@email.com')";
       }else {
          $error = "Your register Name or Password is invalid";
       }
-   }
+   }*/
+
    
-   */
+
         
 ?>
 <html>

@@ -2,6 +2,8 @@
    include("config.php");
    session_start();
 
+    echo session_id();
+
    if($_SERVER["REQUEST_METHOD"] == "POST") {
      //check if login or register
      $Reg_username = mysqli_real_escape_string($db,$_POST['Reg_username']);
@@ -11,7 +13,6 @@
      {
        //get variables
        $Reg_password = mysqli_real_escape_string($db,$_POST['Reg_password']);
-       $Reg_password2 = mysqli_real_escape_string($db,$_POST['Reg_password2']);
        $fullname = mysqli_real_escape_string($db,$_POST['fullname']);
        $email = mysqli_real_escape_string($db,$_POST['email']);
 
