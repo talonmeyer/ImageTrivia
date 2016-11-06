@@ -19,38 +19,39 @@ include('session.php');
 
       <br> </br>
 
-       <div class="w3-responsive">
-           <table class="w3-table w3-striped w3-bordered w3-border">
-               <tr>
-                   <th>First Name</th>
-                   <th>Last Name</th>
-                   <th>Points</th>
-                   <th>Points</th>
+       table class="pure-table">
+       <thead>
+       <tr>
+           <th>#</th>
+           <th>Make</th>
+           <th>Model</th>
+           <th>Year</th>
+       </tr>
+       </thead>
 
-               </tr>
-               <tr>
-                   <td>Jill</td>
-                   <td>Smith</td>
-                   <td>50</td>
-                   <td>50</td>
+       <tbody>
+       <tr>
+           <td>1</td>
+           <td>Honda</td>
+           <td>Accord</td>
+           <td>2009</td>
+       </tr>
 
-               </tr>
-               <tr>
-                   <td>Eve</td>
-                   <td>Jackson</td>
-                   <td>94</td>
-                   <td>94</td>
+       <tr>
+           <td>2</td>
+           <td>Toyota</td>
+           <td>Camry</td>
+           <td>2012</td>
+       </tr>
 
-               </tr>
-               <tr>
-                   <td>Adam</td>
-                   <td>Johnson</td>
-                   <td>67</td>
-                   <td>67</td>
-
-               </tr>
-           </table>
-       </div>
+       <tr>
+           <td>3</td>
+           <td>Hyundai</td>
+           <td>Elantra</td>
+           <td>2010</td>
+       </tr>
+       </tbody>
+       </table>
 
        <br> </br>
        <br> </br>
