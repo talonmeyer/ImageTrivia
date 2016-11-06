@@ -3,15 +3,26 @@
 ?>
 
 <html>
+<style>
+    img {
+        display: block;
+        margin: auto;
+    }
+</style>
 
 <body bgcolor = "#FFFFFF">
 
+<br> </br>
+<img src="sets/logo.png" alt="logo" style="width:50%">
+<br> </br>
+
+
 <head>
    <link rel="stylesheet" type="text/css" href="css/style.css">
-   <h1>Welcome, <?php echo $login_session; ?> </h1>
 </head>
 <div class="main-menu">
     <div class="form">
+        <h1>Welcome, <?php echo $login_session; ?> </h1>
         <form class="new-game" action = "newgame.php" method = "post">
             <button>New Game</button>
         </form>

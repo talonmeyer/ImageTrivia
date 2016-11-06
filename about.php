@@ -1,18 +1,25 @@
 <?php
-   include('session.php');
-   // is this going to work or wat
+include('session.php');
 ?>
-<html>
-   
-   <head>
-      <title>Image Trivia! | About </title>
-   </head>
-   
-   <body>
-      <h1>About</h1>
 
-      <h2><a href = "main.php">Main Menu</a></h2>
-      <h2><a href = "logout.php">Sign Out</a></h2>
-   </body>
-   
+<html>
+
+<body bgcolor = "#FFFFFF">
+
+<head>
+   <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<div class="main-menu">
+   <div class="form">
+
+      <p class="message" style="color:black; font-size:medium ">Made by Talon Meyer</p>
+
+       <br> </br>
+
+      <form class="main" action = "main.php" method = "post">
+         <button>Back</button>
+      </form>
+   </div>
+</div>
+</body>
 </html>
