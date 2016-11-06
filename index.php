@@ -103,7 +103,10 @@ img {
    
    <body bgcolor = "#FFFFFF">
      
-     
+     <br> </br>
+     <br> </br>
+     <br> </br>
+
      <img src="sets/logo.png" alt="logo" style="width:50%">
      
      
