@@ -1,13 +1,6 @@
 <?php
 	 include("config.php");
     session_start();
-    //print_r($_SESSION);
-echo session_id();
-
-
-     $result = mysqli_query($db,'SELECT (Max(id)+1) FROM User');
-     $row = mysqli_fetch_array($result,MYSQLI_NUM);
-     $maxid = $row[0];
 
     //convert session variables
     $fullname = $_SESSION['fullname'];
@@ -15,67 +8,76 @@ echo session_id();
     $username = $_SESSION['username'];
     $password = $_SESSION['password'];
 
-    echo $fullname;
 
+    //Write to log
+    $result = mysqli_query($db,'SELECT (Max(id)+1) FROM Log');
+    $row = mysqli_fetch_array($result,MYSQLI_NUM);
+    $maxlogID = $row[0];
+    $session_id = session_id();
+    $insertLog = 'INSERT INTO Log (id, user, action, sessionid) VALUES (' . $maxlogID . ', "' . $username . '", "registered", "' . $session_id . '")';
+    mysqli_query($db,$insertLog);
 
-    //$headerfrom = 'index.php';
+    //Write user to table
+    $result = mysqli_query($db,'SELECT (Max(id)+1) FROM User');
+    $row = mysqli_fetch_array($result,MYSQLI_NUM);
+    $maxuserid = $row[0];
+    $insertUser = 'INSERT INTO User VALUES (' . $maxuserid . ', "' . $username . '", "' . $password . '", "' . $fullname . '", "' . $email . '", "3","0")';
+    $querySuccess = mysqli_query($db,$insertUser);
 
-
-  // if($_SERVER["REQUEST_METHOD"] == "POST") {
-
-  // }
-     
-   /* if (headers_sent ($headerfrom)) {
-        echo "Name: " . $fullname;
-        echo "Email:  " . $email;
-        echo "User: " . $username;
-        echo "Password: " . $password;
-    }*/
-
-
-     
-     
-     
-     
-     
-   
+    if ($querySuccess == FALSE) {
+        echo 'Rekt!
+        Something went wrong and we do not know why :/';
+    } else {
+        //Send confirmation email
+        $subject = 'Image Trivia | Thanks for registering!';
+        $message = "Greetings, {$fullname}
     
-   /*
-   if($_SERVER["REQUEST_METHOD"] == "POST") {
-     //get new id number
-     $newid = "SELECT (Max(id)+1) FROM User";
-     
-      //$result = mysqli_query($db,$newid);
-      //$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      //$active = $row['active'];
-      //$count = mysqli_num_rows($result);
-	  echo result$
-     
-     $sql = "INSERT INTO User (id,username,passcode,name,email)
-VALUES (''$newid'', 'gnu', 'newpass', 'name', 'email@email.com')";
-     
-      $result = mysqli_query($db,$sql);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-      $active = $row['active'];
-      
-      $count = mysqli_num_rows($result);
-      
-      // If result matched $myusername and $mypassword, table row must be 1 row
-		
-      if($count == 1) {
-	//if count > 1 then tell them already registered
-        
-        
-         
-         header("location: main.php");
-      }else {
-         $error = "Your register Name or Password is invalid";
-      }
-   }*/
+    Thank you for creating an account with ImageTrivia. 
+    
+    Your username is: {$username}
+    Your password is: {$password}
+    
+    Do not lose this email. Are you that capable at least?
+    
+    Sincerely,
+    
+    The ImageTrivia Team";
 
-   
+        $headers = 'From: Image Trivia <imagetrivia@talonmeyer.com>' . "\r\n" .
+            'Reply-To: imagetrivia@talonmeyer.com' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
 
-        
+        $mailSent = mail($email, $subject, $message, $headers);
+
+        if ($mailSent == FALSE ) {
+            //Write failure to the log
+            $result = mysqli_query($db,'SELECT (Max(id)+1) FROM Log');
+            $row = mysqli_fetch_array($result,MYSQLI_NUM);
+            $maxlogID = $row[0];
+            $session_id = session_id();
+            $insertLog = 'INSERT INTO Log (id, user, action, sessionid) VALUES (' . $maxlogID . ', "' . $username . '", "sendregister email failed", "' . $session_id . '")';
+            mysqli_query($db,$insertLog);
+
+            echo 'Rekt!
+        So you got registered but our auto email sender quit on us :/';
+        } else {
+            //Write success to the log
+            $result = mysqli_query($db,'SELECT (Max(id)+1) FROM Log');
+            $row = mysqli_fetch_array($result,MYSQLI_NUM);
+            $maxlogID = $row[0];
+            $session_id = session_id();
+            $insertLog = 'INSERT INTO Log (id, user, action, sessionid) VALUES (' . $maxlogID . ', "' . $username . '", "send register email success", "' . $session_id . '")';
+            mysqli_query($db,$insertLog);
+
+            echo 'Success!
+        You will be getting an email from us with your information in it. Thanks!';
+            //sleep(5);
+            //echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
+        }
+    }
+
+
+
 ?>
 <html>
    
@@ -108,7 +110,7 @@ VALUES (''$newid'', 'gnu', 'newpass', 'name', 'email@email.com')";
 </head>
 <div class="register-page">
   <div class="form">
-    <form class="back-form" action = "login.php" method = "post">
+    <form class="back-form" action = "index.php" method = "post">
       <button>Back</button>
     </form>            
     <p class="message" style="color:red;"><?php echo $error; ?></p>

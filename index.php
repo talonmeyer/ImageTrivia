@@ -2,8 +2,6 @@
    include("config.php");
    session_start();
 
-    echo session_id();
-
    if($_SERVER["REQUEST_METHOD"] == "POST") {
      //check if login or register
      $Reg_username = mysqli_real_escape_string($db,$_POST['Reg_username']);
@@ -20,29 +18,31 @@
       $check_username = "SELECT id FROM User WHERE username = '$Reg_username'";
       $result_check_username = mysqli_query($db,$check_username);
       $row = mysqli_fetch_array($result_check_username,MYSQLI_ASSOC);
-      $active = $row['active'];
+      //$active = $row['active'];
+      $usercount = mysqli_num_rows($result_check_username);
 
-      if($count !== 0) {
+
+         if($usercount !== 0) {
           $error = "Username already taken. Real original.";
-      } else {
-          //make sure email isn't registered already
-          $check = "SELECT id FROM User WHERE email = '$email'";
-          $result = mysqli_query($db,$check);
-          $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-          $active = $row['active'];
-          $count = mysqli_num_rows($result);
+         } else {
+             //make sure email isn't registered already
+             $check = "SELECT id FROM User WHERE email = '$email'";
+             $emailresult = mysqli_query($db, $check);
+             $row = mysqli_fetch_array($emailresult, MYSQLI_ASSOC);
+             $active = $row['active'];
+             $emailcount = mysqli_num_rows($emailresult);
 
-          if ($count !== 0) {
-              $error = "Email already registered!";
-          } else {
-              //create session variables and redirect to register.php
-              $_SESSION['password'] = $Reg_password;
-              $_SESSION['fullname'] = $fullname;
-              $_SESSION['email'] = $email;
-              $_SESSION['username'] = $Reg_username;
-              header("location: register.php");
-          }
-      }
+             if ($emailcount == 1) {
+                $error = "Email already registered!";
+             } else {
+                //create session variables and redirect to register.php
+                $_SESSION['password'] = $Reg_password;
+                $_SESSION['fullname'] = $fullname;
+                $_SESSION['email'] = $email;
+                $_SESSION['username'] = $Reg_username;
+                echo "<meta http-equiv=\"refresh\" content=\"0;URL=register.php\">";
+            }
+        }
      }
        //IF login event
        else {
